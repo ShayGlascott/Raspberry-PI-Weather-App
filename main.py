@@ -6,22 +6,20 @@ from flask_socketio import SocketIO, send, emit
 from flask_cors import CORS
 
 
-con = sqlite3.connect("weatherData.db")
-cur = con.cursor()
 
 
-sqlCreateTable = """ CREATE TABLE IF NOT EXISTS weather (
-                                        utc real PRIMARY KEY,
-                                        co2 real,
-                                        tvoc real,
-                                        temp real,
-                                        pressure real,
-                                        humidity real,
-                                        light real
-                                    ); """
+# sqlCreateTable = """ CREATE TABLE IF NOT EXISTS weather (
+#                                         utc real PRIMARY KEY,
+#                                         co2 real,
+#                                         tvoc real,
+#                                         temp real,
+#                                         pressure real,
+#                                         humidity real,
+#                                         light real
+#                                     ); """
 
 
-cur.execute(sqlCreateTable)
+# cur.execute(sqlCreateTable)
 app = Flask(__name__)
     
 socketio = SocketIO(app)
@@ -52,13 +50,18 @@ CORS(app)
 def background_task():
     count = 0
     while True:
+        con = sqlite3.connect("weatherData.db")
+
+        cur = con.cursor()
+
         cur.execute("SELECT * FROM weather ORDER BY utc DESC LIMIT 1")
         recentData = cur.fetchone()
         if recentData:
             utc, co2, tvoc, temp, pressure, humidity, light = recentData
         else:
-            utc, co2, tvoc, temp, pressure, humidity, light = 0
-        socketio.emit('update', {'utc': {utc}, 'co2': {co2},'tvoc': {tvoc},'temp': {temp}, 'pressure': {pressure}, 'humidity': {humidity}, 'light': {light}})
+            utc = co2 = tvoc = temp = pressure = humidity = light = 0
+        cur.close()
+        socketio.emit('update', {'utc': utc, 'co2': co2, 'tvoc': tvoc, 'temp': temp, 'pressure': pressure, 'humidity': humidity, 'light': light})
         count += 1
         socketio.sleep(2) 
 
@@ -71,5 +74,9 @@ def handle_connect():
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/charts')
+def charts():
+    return render_template('charts.html')
 
 socketio.run(app, debug=True, port=2000)
