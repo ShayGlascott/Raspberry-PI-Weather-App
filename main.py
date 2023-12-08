@@ -30,31 +30,34 @@ CORS(app)
 
 #### GRAB ARDUINO SENSOR VALUES: ##### 
 
-ser = serial.Serial('COM3', 9600) 
+# ser = serial.Serial('COM3', 9600) 
 
-data = ser.readline()
+# data = ser.readline()
 
-weather = data.decode('utf-8').strip().split(',')
-utc = int(weather[0])
-co2 = float(weather[1])
-tvoc = float(weather[2])
-temp = float(weather[3])
-pressure = float(weather[4])
-humidity = float(weather[5])
-light = float(weather[6])
+# weather = data.decode('utf-8').strip().split(',')
+# utc = int(weather[0])
+# co2 = float(weather[1])
+# tvoc = float(weather[2])
+# temp = float(weather[3])
+# pressure = float(weather[4])
+# humidity = float(weather[5])
+# light = float(weather[6])
 
-weather_tuple = (utc, co2, tvoc, temp, pressure, humidity, light)
+# weather_tuple = (utc, co2, tvoc, temp, pressure, humidity, light)
 
-cur.execute("INSERT INTO weather VALUES (?, ?, ?, ?, ?, ?, ?);", weather_tuple)
-con.commit()
-
-
-# cur.execute("DELETE FROM weather;")
+# cur.execute("INSERT INTO weather VALUES (?, ?, ?, ?, ?, ?, ?);", weather_tuple)
 # con.commit()
+
 
 def background_task():
     count = 0
     while True:
+        cur.execute("SELECT * FROM weather ORDER BY utc DESC LIMIT 1")
+        recentData = cur.fetchone()
+        if recentData:
+            utc, co2, tvoc, temp, pressure, humidity, light = recentData
+        else:
+            utc, co2, tvoc, temp, pressure, humidity, light = 0
         socketio.emit('update', {'utc': {utc}, 'co2': {co2},'tvoc': {tvoc},'temp': {temp}, 'pressure': {pressure}, 'humidity': {humidity}, 'light': {light}})
         count += 1
         socketio.sleep(2) 
