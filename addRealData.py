@@ -4,7 +4,13 @@ import serial
 import sqlite3
 #from datetime import datetime
 
-ser = serial.Serial('COM6', baudrate=9600, timeout=1)
+# Windows
+# comPort = 'COM6'
+# Mac
+comPort = '/dev/cu.usbmodem11401'
+
+# Mac
+ser = serial.Serial(comPort, baudrate=9600, timeout=1)
 
 con = sqlite3.connect("weatherData.db")
 cur = con.cursor()
