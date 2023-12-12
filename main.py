@@ -1,51 +1,22 @@
+import base64
 import time
 import sqlite3
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template
 import serial
 from flask_socketio import SocketIO, send, emit
 from flask_cors import CORS
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')  # Use Agg backend
+import matplotlib.pyplot as plt
+from io import BytesIO
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
-
-
-# sqlCreateTable = """ CREATE TABLE IF NOT EXISTS weather (
-#                                         utc real PRIMARY KEY,
-#                                         co2 real,
-#                                         tvoc real,
-#                                         temp real,
-#                                         pressure real,
-#                                         humidity real,
-#                                         light real
-#                                     ); """
-
-
-# cur.execute(sqlCreateTable)
 app = Flask(__name__)
     
 socketio = SocketIO(app)
 CORS(app)
-
-
-#### GRAB ARDUINO SENSOR VALUES: ##### 
-
-# ser = serial.Serial('COM3', 9600) 
-
-# data = ser.readline()
-
-# weather = data.decode('utf-8').strip().split(',')
-# utc = int(weather[0])
-# co2 = float(weather[1])
-# tvoc = float(weather[2])
-# temp = float(weather[3])
-# pressure = float(weather[4])
-# humidity = float(weather[5])
-# light = float(weather[6])
-
-# weather_tuple = (utc, co2, tvoc, temp, pressure, humidity, light)
-
-# cur.execute("INSERT INTO weather VALUES (?, ?, ?, ?, ?, ?, ?);", weather_tuple)
-# con.commit()
-
 
 def background_task():
     count = 0
@@ -70,13 +41,43 @@ def handle_connect():
     emit('message', {'data': 'Connected'})
     socketio.start_background_task(target=background_task)
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/charts')
 def charts():
-    return render_template('charts.html')
+    conn = sqlite3.connect('weatherData.db')
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT utc, co2, tvoc, temp, pressure, humidity, light FROM weather ORDER BY utc DESC ")
+    data = cursor.fetchall()
+
+    conn.close()
+
+    columns = ['utc', 'co2', 'tvoc', 'temp', 'pressure', 'humidity', 'light']
+    df = pd.DataFrame(data, columns=columns)
+
+    chart_images = {}
+    for column in columns[1:]:  
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.plot(df['utc'], df[column], marker='o')
+        ax.set_title(f'{column} over Time')
+        ax.set_xlabel('UTC Time')
+        ax.set_ylabel(column)
+        ax.grid(True)
+
+        image_buffer = BytesIO()
+        canvas = FigureCanvas(fig)
+        canvas.print_png(image_buffer)
+        plt.close(fig)
+
+        image_base64 = base64.b64encode(image_buffer.getvalue()).decode('utf-8')
+
+        chart_images[column] = f'data:image/png;base64,{image_base64}'
+
+    return render_template('charts.html', chart_images=chart_images)
+
+
 
 socketio.run(app, debug=True, port=2000)
