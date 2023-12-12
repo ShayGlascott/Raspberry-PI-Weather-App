@@ -61,7 +61,7 @@ def charts():
     chart_images = {}
     for column in columns[1:]:  
         fig, ax = plt.subplots(figsize=(8, 6))
-        ax.plot(df['utc'], df[column], marker='o')
+        ax.plot(df['utc'], df[column])
         ax.set_title(f'{column} over Time')
         ax.set_xlabel('UTC Time')
         ax.set_ylabel(column)
