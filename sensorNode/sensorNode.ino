@@ -61,19 +61,19 @@ float readLightSensor()
 void printData()
 {
   Serial.print("(");
-  Serial.print(getTime());
+  Serial.print(getTime()); // utc
   Serial.print(",");
-  Serial.print(myCCS811.getCO2());
+  Serial.print(myCCS811.getCO2()); // ppm
   Serial.print(",");
-  Serial.print(myCCS811.getTVOC());
+  Serial.print(myCCS811.getTVOC()); // ppb
   Serial.print(",");
-  Serial.print(myBME280.readTempF(), 1);
+  Serial.print(myBME280.readTempF(), 1); // F
   Serial.print(",");
-  Serial.print(myBME280.readFloatPressure(), 2);
+  Serial.print(myBME280.readFloatPressure(), 2); // Pa
   Serial.print(",");
-  Serial.print(myBME280.readFloatHumidity(), 0);
+  Serial.print(myBME280.readFloatHumidity(), 0); // %
   Serial.print(",");
-  Serial.print(readLightSensor());
+  Serial.print(readLightSensor()); // Lm
   Serial.println(")");
 }
 
