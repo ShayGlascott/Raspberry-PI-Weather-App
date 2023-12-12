@@ -17,14 +17,14 @@
         const socket = io("http://127.0.0.1:2000/");
         socket.on('update', function (message) {
             console.log('Received message:', message);
-            document.getElementById("co2").innerHTML = 'CO2: ' + message.co2;
-            document.getElementById("tvoc").innerHTML = 'TVOC: ' + message.tvoc;
-            document.getElementById("temp").innerHTML = 'Temperature: ' + message.temp;
-            document.getElementById("pressure").innerHTML = 'Pressure: ' + message.pressure;
-            document.getElementById("humidity").innerHTML = 'Humidity: ' + message.humidity;
-            document.getElementById("light").innerHTML = 'Light: ' + message.light;
+            document.getElementById("co2").innerHTML = message.co2 + 'ppm';
+            document.getElementById("tvoc").innerHTML = message.tvoc + 'ppb';
+            document.getElementById("temp").innerHTML =  message.temp + 'F';
+            document.getElementById("pressure").innerHTML = message.pressure + 'Pa';
+            document.getElementById("humidity").innerHTML = message.humidity + '%';
+            document.getElementById("light").innerHTML = message.light + 'lm';
         });
-        socket.emit("howdy", "stranger");
+        // socket.emit("howdy", "stranger");
     </script>
 
 

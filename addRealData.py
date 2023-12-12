@@ -7,7 +7,9 @@ import sqlite3
 # Windows
 # comPort = 'COM6'
 # Mac
-comPort = '/dev/cu.usbmodem11401'
+# comPort = '/dev/cu.usbmodem11401'
+# Mac Xbee
+comPort = '/dev/cu.usbserial-D308FU0O'
 
 # Mac
 ser = serial.Serial(comPort, baudrate=9600, timeout=1)
