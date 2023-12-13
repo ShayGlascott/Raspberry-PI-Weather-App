@@ -33,7 +33,9 @@ sudo apt install...
 - Clone the project repository to your Raspberry Pi:
   - git clone https://github.com/ShayGlascott/Raspberry-PI-Weather-App.git
   - cd Raspberry-PI-Weather-App
-- Run
+ 
+- Run python3 main.py
+- Open a new terminal window and run python3 addRealData.py
   
 
 
