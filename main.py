@@ -11,6 +11,7 @@ matplotlib.use('Agg')  # Use Agg backend
 import matplotlib.pyplot as plt
 from io import BytesIO
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.ticker import MaxNLocator
 
 
 app = Flask(__name__)
@@ -53,10 +54,11 @@ def charts():
     cursor.execute("SELECT utc, co2, tvoc, temp, pressure, humidity, light FROM weather ORDER BY utc DESC ")
     data = cursor.fetchall()
 
-    conn.close()
+    conn.close()#
 
     columns = ['utc', 'co2', 'tvoc', 'temp', 'pressure', 'humidity', 'light']
     df = pd.DataFrame(data, columns=columns)
+    #df['utc'] = pd.to_datetime(df['utc'], unit='s').dt.strftime('%I:%M %p').astype(str)
 
     chart_images = {}
     for column in columns[1:]:  
@@ -66,6 +68,7 @@ def charts():
         ax.set_xlabel('UTC Time')
         ax.set_ylabel(column)
         ax.grid(True)
+        #ax.xaxis.set_major_locator(MaxNLocator(nbins=5))
 
         image_buffer = BytesIO()
         canvas = FigureCanvas(fig)
