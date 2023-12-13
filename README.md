@@ -9,18 +9,31 @@ providing a user-friendly interface for monitoring and analyzing current weather
 
 ## Table of Contents
 
-- [Installation](#installation)
 - [Usage](#usage)
 
-## Installation
+## Usage
 
-git clone https://github.com/your-username/your-project.git
-cd your-project
-npm install
+To set up and use the smart weather station, follow these steps:
+
+### 1. Hardware Setup
+
+- Connect the Raspberry Pi to power and ensure it has internet connectivity.
+- Place the Arduino outdoors with the connected sensors for optimal data collection.
+- Make sure the XBee transmitters are properly configured and connected to both the Arduino and Raspberry Pi.
+
+### 2. Software Installation
 
 ### Dependencies (Not pre installed on Raspberry Pi 3v+)
 
+sudo apt install...
 - [flask-socketio]
 - [flask-cors]
 - [pandas]
+
+- Clone the project repository to your Raspberry Pi:
+  - git clone https://github.com/ShayGlascott/Raspberry-PI-Weather-App.git
+  - cd Raspberry-PI-Weather-App
+- Run
+  
+
 
