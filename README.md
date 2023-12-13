@@ -34,6 +34,8 @@ sudo apt install...
   - git clone https://github.com/ShayGlascott/Raspberry-PI-Weather-App.git
   - cd Raspberry-PI-Weather-App
    
+
+- Find COM port on Raspberry Pi and change comPort variable in "addRealData.py"
 - Run "python3 main.py"
 - Open a new terminal window and run "python3 addRealData.py"
   

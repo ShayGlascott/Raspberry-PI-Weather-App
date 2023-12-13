@@ -5,11 +5,11 @@ import sqlite3
 #from datetime import datetime
 
 # Windows
-comPort = 'COM3'
+#comPort = 'COM3'
 # Mac
 # comPort = '/dev/cu.usbmodem11401'
 # Mac Xbee
-#comPort = '/dev/cu.usbserial-D308FU0O'
+comPort = '/dev/cu.usbserial-D308FU0O'
 
 # Mac
 ser = serial.Serial(comPort, baudrate=9600, timeout=1)

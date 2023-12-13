@@ -58,7 +58,7 @@ def charts():
 
     columns = ['utc', 'co2', 'tvoc', 'temp', 'pressure', 'humidity', 'light']
     df = pd.DataFrame(data, columns=columns)
-    #df['utc'] = pd.to_datetime(df['utc'], unit='s').dt.strftime('%I:%M %p').astype(str)
+    df['utc'] = pd.to_datetime(df['utc'], unit='s').dt.strftime('%I:%M %p').astype(str)
 
     chart_images = {}
     for column in columns[1:]:  
@@ -68,7 +68,7 @@ def charts():
         ax.set_xlabel('UTC Time')
         ax.set_ylabel(column)
         ax.grid(True)
-        #ax.xaxis.set_major_locator(MaxNLocator(nbins=5))
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=5))
 
         image_buffer = BytesIO()
         canvas = FigureCanvas(fig)
