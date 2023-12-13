@@ -1,6 +1,5 @@
 # Raspberry-Pi Weather App
 
-
 The project features a smart weather station with a Raspberry Pi serving as the base station. The Raspberry Pi hosts a dedicated website and collects sensor data transmitted 
 from an Arduino located outdoors using XBee transmitters. This setup allows users to access both real-time weather data and historical trends stored on the Raspberry Pi.
 
