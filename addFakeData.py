@@ -2,12 +2,10 @@ import sqlite3
 import random
 from datetime import datetime, timedelta
 
-# Connect to the SQLite database
 con = sqlite3.connect("weatherData.db")
 cur = con.cursor()
 
-# Insert placeholder data
-for _ in range(10):  # Insert 10 rows for example
+for _ in range(10): 
     # utc = int(datetime.utcnow().timestamp())
     co2 = random.uniform(300, 800)
     tvoc = random.uniform(0, 1)
@@ -18,9 +16,7 @@ for _ in range(10):  # Insert 10 rows for example
 
     weather_tuple = (co2, tvoc, temp, pressure, humidity, light)
 
-    # Insert data into the weather table
     cur.execute("INSERT INTO weather ( co2, tvoc, temp, pressure, humidity, light) VALUES ( ?, ?, ?, ?, ?, ?);", weather_tuple)
 
-# Commit the changes and close the connection
 con.commit()
 con.close()

@@ -7,7 +7,7 @@ from flask_socketio import SocketIO, send, emit
 from flask_cors import CORS
 import pandas as pd
 import matplotlib
-matplotlib.use('Agg')  # Use Agg backend
+matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 from io import BytesIO
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
